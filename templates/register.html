@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | NoTrack - Controle Financeiro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .register-container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .left-section {
+            flex: 1;
+            background: linear-gradient(135deg, #4a6ee0 0%, #6a3093 100%);
+            color: white;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo i {
+            font-size: 32px;
+            margin-right: 15px;
+            color: #fff;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .left-section h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .left-section p {
+            line-height: 1.6;
+            opacity: 0.9;
+            font-size: 15px;
+        }
+        
+        .benefits {
+            margin-top: 30px;
+        }
+        
+        .benefit {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .benefit:hover {
+            transform: translateX(5px);
+        }
+        
+        .benefit i {
+            margin-right: 10px;
+            color: #9ecaed;
+            font-size: 18px;
+        }
+        
+        .right-section {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .register-header h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .register-header p {
+            color: #666;
+            font-size: 15px;
+        }
+        
+        .form-container {
+            width: 100%;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e1e5ee;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #4a6ee0;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 110, 224, 0.1);
+        }
+        
+        .password-requirements {
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #666;
+            border-left: 3px solid #4a6ee0;
+        }
+        
+        .password-requirements p {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .password-requirements ul {
+            padding-left: 20px;
+        }
+        
+        .password-requirements li {
+            margin-bottom: 3px;
+        }
+        
+        .btn-register {
+            background: linear-gradient(to right, #4a6ee0, #6a3093);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(74, 110, 224, 0.25);
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+        
+        .login-link a {
+            color: #4a6ee0;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .login-link a:hover {
+            color: #6a3093;
+            text-decoration: underline;
+        }
+        
+        .terms {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #888;
+            text-align: center;
+        }
+        
+        .terms a {
+            color: #4a6ee0;
+            text-decoration: none;
+        }
+        
+        .terms a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        /* Mensagens de erro/sucesso */
+        .message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .error {
+            background-color: #ffeaea;
+            color: #d63031;
+            border-left: 4px solid #d63031;
+        }
+        
+        .success {
+            background-color: #e8f7ef;
+            color: #00b894;
+            border-left: 4px solid #00b894;
+        }
+        
+        .message i {
+            margin-right: 10px;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .register-container {
+                flex-direction: column;
+                max-width: 500px;
+            }
+            
+            .left-section {
+                padding: 30px;
+            }
+            
+            .right-section {
+                padding: 40px 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .left-section, .right-section {
+                padding: 25px 20px;
+            }
+            
+            .logo h1 {
+                font-size: 24px;
+            }
+            
+            .register-header h2 {
+                font-size: 24px;
+            }
+            
+            .benefit {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <!-- Seção Esquerda - Benefícios -->
+        <div class="left-section">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>NoTrack</h1>
+            </div>
+            
+            <h2>Comece a controlar suas finanças hoje</h2>
+            <p>Crie sua conta gratuitamente e tenha acesso a todas as ferramentas para uma gestão financeira eficiente.</p>
+            
+            <div class="benefits">
+                <div class="benefit">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard completo com gráficos interativos</span>
+                </div>
+                <div class="benefit">
+                    <i class="fas fa-bell"></i>
+                    <span>Alertas de gastos e limites orçamentários</span>
+                </div>
+                <div class="benefit">
+                    <i class="fas fa-file-export"></i>
+                    <span>Exporte relatórios em PDF e Excel</span>
+                </div>
+                <div class="benefit">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Acesso multiplataforma (web e mobile)</span>
+                </div>
+                <div class="benefit">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Seus dados protegidos com criptografia</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção Direita - Formulário de Registro -->
+        <div class="right-section">
+            <div class="register-header">
+                <h2>Crie sua conta</h2>
+                <p>Preencha os dados abaixo para começar</p>
+            </div>
+            
+            <div class="form-container">
+                <!-- Se houver mensagens de erro -->
+                {% if erro %}
+                <div class="message error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ erro }}
+                </div>
+                {% endif %}
+                
+                <!-- Se houver mensagens de sucesso -->
+                {% if sucesso %}
+                <div class="message success">
+                    <i class="fas fa-check-circle"></i>
+                    {{ sucesso }}
+                </div>
+                {% endif %}
+                
+                <form method="post">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="nome" placeholder="Nome completo" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="Endereço de email" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="senha" id="senha" placeholder="Crie uma senha segura" required>
+                    </div>
+                    
+                    <div class="password-requirements">
+                        <p>Sua senha deve conter:</p>
+                        <ul>
+                            <li>Pelo menos 8 caracteres</li>
+                            <li>Uma letra maiúscula e uma minúscula</li>
+                            <li>Um número e um caractere especial</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="confirmar_senha" placeholder="Confirme sua senha" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-register">
+                        <i class="fas fa-user-plus"></i> Criar minha conta
+                    </button>
+                </form>
+                
+                <div class="terms">
+                    Ao criar uma conta, você concorda com nossos <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>.
+                </div>
+                
+                <div class="login-link">
+                    Já tem uma conta? <a href="{{ url_for('login') }}">Faça login aqui</a>
+                </div>
+                
+                <div class="footer">
+                    &copy; 2023 NoTrack - Sistema de Controle Financeiro
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Validação simples da senha no frontend
+        document.querySelector('form').addEventListener('submit', function(event) {
+            const senha = document.getElementById('senha').value;
+            const confirmarSenha = document.querySelector('input[name="confirmar_senha"]').value;
+            
+            // Verifica se as senhas coincidem
+            if (senha !== confirmarSenha) {
+                alert('As senhas não coincidem. Por favor, verifique.');
+                event.preventDefault();
+                return false;
+            }
+            
+            // Verifica se a senha tem pelo menos 8 caracteres
+            if (senha.length < 8) {
+                alert('A senha deve ter pelo menos 8 caracteres.');
+                event.preventDefault();
+                return false;
+            }
+            
+            // Verifica se tem pelo menos uma letra maiúscula e uma minúscula
+            if (!/(?=.*[a-z])(?=.*[A-Z])/.test(senha)) {
+                alert('A senha deve conter pelo menos uma letra maiúscula e uma minúscula.');
+                event.preventDefault();
+                return false;
+            }
+            
+            // Verifica se tem pelo menos um número
+            if (!/(?=.*\d)/.test(senha)) {
+                alert('A senha deve conter pelo menos um número.');
+                event.preventDefault();
+                return false;
+            }
+            
+            return true;
+        });
+        
+        // Feedback visual para força da senha
+        document.getElementById('senha').addEventListener('input', function() {
+            const senha = this.value;
+            const requirements = document.querySelector('.password-requirements');
+            
+            if (senha.length === 0) {
+                requirements.style.display = 'block';
+            } else if (senha.length >= 8 && /(?=.*[a-z])(?=.*[A-Z])/.test(senha) && /(?=.*\d)/.test(senha)) {
+                requirements.style.borderLeftColor = '#00b894';
+            } else {
+                requirements.style.borderLeftColor = '#ff7675';
+            }
+        });
+    </script>
+</body>
+</html>

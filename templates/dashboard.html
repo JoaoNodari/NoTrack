@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | NoTrack{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<div class="dashboard">
+    <!-- Cabeçalho do Dashboard -->
+    <div class="dashboard-header">
+        <h2>Dashboard Financeiro</h2>
+        <div class="period-selector">
+            <form method="get" class="filter-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mes">Mês:</label>
+                        <select id="mes" name="mes" class="form-control">
+                            {% for i in range(1, 13) %}
+                            <option value="{{ i }}" {% if i == mes %}selected{% endif %}>{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ano">Ano:</label>
+                        <input type="number" id="ano" name="ano" value="{{ ano }}" min="2000" max="2050" class="form-control">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="summary-cards">
+        <div class="summary-card card-income">
+            <div class="card-icon">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+            <div class="card-content">
+                <h3>Receitas</h3>
+                <p class="card-value">R$ {{ total_receita }}</p>
+                <p class="card-subtitle">Total do período</p>
+            </div>
+        </div>
+        
+        <div class="summary-card card-expense">
+            <div class="card-icon">
+                <i class="fas fa-arrow-down"></i>
+            </div>
+            <div class="card-content">
+                <h3>Gastos</h3>
+                <p class="card-value">R$ {{ total_gasto }}</p>
+                <p class="card-subtitle">Total do período</p>
+            </div>
+        </div>
+        
+        <div class="summary-card card-balance">
+            <div class="card-icon">
+                <i class="fas fa-balance-scale"></i>
+            </div>
+            <div class="card-content">
+                <h3>Saldo</h3>
+                <p class="card-value">R$ {{ saldo }}</p>
+                <p class="card-subtitle">
+                    {% if saldo|float > 0 %}
+                        <span class="positive">Positivo</span>
+                    {% elif saldo|float < 0 %}
+                        <span class="negative">Negativo</span>
+                    {% else %}
+                        <span>Neutro</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        
+        <div class="summary-card card-transactions">
+            <div class="card-icon">
+                <i class="fas fa-receipt"></i>
+            </div>
+            <div class="card-content">
+                <h3>Lançamentos</h3>
+                <p class="card-value">{{ qtd }}</p>
+                <p class="card-subtitle">Total registrados</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos e Análises -->
+    <div class="dashboard-grid">
+        <!-- Gráfico 1: Gastos por Categoria -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Gastos por Categoria ({{ mes }}/{{ ano }})</h3>
+                <p class="chart-subtitle">Distribuição dos gastos por categoria</p>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="graficoCategorias"></canvas>
+                {% if not categorias_mes %}
+                <div class="no-data">
+                    <i class="fas fa-chart-pie"></i>
+                    <p>Nenhum dado para o período selecionado</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="chart-footer">
+                <ul class="category-list">
+                    {% for nome, total in gastos_mes %}
+                    <li>
+                        <span class="category-name">{{ nome }}</span>
+                        <span class="category-value">R$ {{ total }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Gráfico 2: Gastos por Mês -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Gastos por Mês em {{ ano }}</h3>
+                <p class="chart-subtitle">Evolução mensal dos gastos</p>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="graficoMeses"></canvas>
+                {% if not meses_ano %}
+                <div class="no-data">
+                    <i class="fas fa-chart-bar"></i>
+                    <p>Nenhum dado para o ano selecionado</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="chart-footer">
+                <ul class="month-list">
+                    {% for mes_num, total in gastos_ano %}
+                    <li>
+                        <span class="month-name">Mês {{ mes_num }}</span>
+                        <span class="month-value">R$ {{ total }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Gráfico 3: Formas de Pagamento -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Formas de Pagamento ({{ mes }}/{{ ano }})</h3>
+                <p class="chart-subtitle">Distribuição por meio de pagamento</p>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="graficoFormas"></canvas>
+                {% if not formas_labels %}
+                <div class="no-data">
+                    <i class="fas fa-credit-card"></i>
+                    <p>Nenhum dado disponível</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="chart-footer">
+                <div class="highlight-card">
+                    <h4>Total no Crédito:</h4>
+                    <p class="highlight-value">R$ {{ total_credito }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Análise Comparativa -->
+        <div class="analysis-container">
+            <div class="chart-header">
+                <h3>Análise Comparativa</h3>
+                <p class="chart-subtitle">Pix vs Crédito ({{ mes }}/{{ ano }})</p>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="graficoPixCredito"></canvas>
+                {% if not labels_pc %}
+                <div class="no-data">
+                    <i class="fas fa-exchange-alt"></i>
+                    <p>Nenhum dado para comparação</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Total Anual por Categoria -->
+        <div class="table-container">
+            <div class="chart-header">
+                <h3>Total Anual por Categoria</h3>
+                <p class="chart-subtitle">Acumulado em {{ ano }}</p>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Categoria</th>
+                            <th>Total</th>
+                            <th>% do Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for nome, total in total_categoria_ano %}
+                        <tr>
+                            <td>{{ nome }}</td>
+                            <td>R$ {{ total }}</td>
+                            <td>
+                                <div class="percentage-bar">
+                                    <div class="bar-fill" style="width: {{ (total / total_gasto_ano * 100)|default(0) }}%"></div>
+                                </div>
+                                <span class="percentage-text">{{ "%.1f"|format((total / total_gasto_ano * 100)|default(0)) }}%</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Gráfico de Categorias
+    {% if categorias_mes %}
+    const categorias = {{ categorias_mes | tojson }};
+    const valores = {{ valores_mes | tojson }};
+    
+    new Chart(document.getElementById('graficoCategorias'), {
+        type: 'doughnut',
+        data: {
+            labels: categorias,
+            datasets: [{
+                data: valores,
+                backgroundColor: [
+                    '#3498db', '#2ecc71', '#e74c3c', '#f39c12', 
+                    '#9b59b6', '#1abc9c', '#d35400', '#34495e',
+                    '#7f8c8d', '#f1c40f', '#e67e22', '#16a085'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20
+                    }
+                }
+            }
+        }
+    });
+    {% endif %}
+
+    // Gráfico de Meses
+    {% if meses_ano %}
+    const meses = {{ meses_ano | tojson }};
+    const valoresMeses = {{ valores_ano | tojson }};
+    
+    new Chart(document.getElementById('graficoMeses'), {
+        type: 'bar',
+        data: {
+            labels: meses.map(m => `Mês ${m}`),
+            datasets: [{
+                label: 'Gastos (R$)',
+                data: valoresMeses,
+                backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                borderColor: 'rgba(52, 152, 219, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    {% endif %}
+
+    // Gráfico de Formas de Pagamento
+    {% if formas_labels %}
+    const formasLabels = {{ formas_labels | tojson }};
+    const formasValores = {{ formas_valores | tojson }};
+    
+    new Chart(document.getElementById("graficoFormas"), {
+        type: 'pie',
+        data: {
+            labels: formasLabels,
+            datasets: [{
+                data: formasValores,
+                backgroundColor: [
+                    '#27ae60', '#e74c3c', '#3498db', '#f39c12',
+                    '#9b59b6', '#1abc9c'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+    {% endif %}
+
+    // Gráfico Pix vs Crédito
+    {% if labels_pc %}
+    const labelsPC = {{ labels_pc | tojson }};
+    const valoresPC = {{ valores_pc | tojson }};
+    
+    new Chart(document.getElementById("graficoPixCredito"), {
+        type: 'bar',
+        data: {
+            labels: labelsPC,
+            datasets: [{
+                label: 'Valor (R$)',
+                data: valoresPC,
+                backgroundColor: [
+                    'rgba(39, 174, 96, 0.7)',
+                    'rgba(52, 152, 219, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(39, 174, 96, 1)',
+                    'rgba(52, 152, 219, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    {% endif %}
+</script>
+{% endblock %}

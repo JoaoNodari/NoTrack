@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<h2>Minhas categorias</h2>
+
+<ul>
+    {% for id, nome, tipo in categorias %}
+        <li>
+            {{ nome }} ({{ tipo }})
+            - <a href="{{ url_for('editar_categoria', id=id) }}">Editar</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<br>
+<a href="{{ url_for('dashboard') }}">Voltar</a>
+{% endblock %}

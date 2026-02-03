@@ -1,0 +1,64 @@
+from database import get_connection
+
+conn = get_connection()
+cursor = conn.cursor()
+
+sql = """
+INSERT INTO categorias (usuario_id, nome, tipo)
+VALUES (%s, %s, %s)
+"""
+
+cursor.execute(sql, (1, "Salário", "receita"))
+
+conn.commit()
+cursor.close()
+conn.close()
+
+print("Categoria criada")
+
+
+-----
+
+from database import get_connection
+from datetime import date
+
+conn = get_connection()
+cursor = conn.cursor()
+
+sql = """
+INSERT INTO lancamentos (usuario_id, categoria_id, valor, data, descricao)
+VALUES (%s, %s, %s, %s, %s)
+"""
+
+cursor.execute(
+    sql,
+    (1, 1, 3000.00, date.today(), "Salário mensal")
+)
+
+conn.commit()
+cursor.close()
+conn.close()
+
+print("Lançamento criado")
+
+-------
+
+from database import get_connection
+
+conn = get_connection()
+cursor = conn.cursor()
+
+sql = """
+INSERT INTO usuarios (nome, email, senha_hash)
+VALUES (%s, %s, %s)
+RETURNING id;
+"""
+
+cursor.execute(sql, ("João", "joao@email.com", "senha_falsa_hash"))
+user_id = cursor.fetchone()[0]
+
+conn.commit()
+cursor.close()
+conn.close()
+
+print("Usuário criado com ID:", user_id)

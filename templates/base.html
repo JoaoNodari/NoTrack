@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NoTrack - Controle Financeiro{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    {% block head %}{% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>NoTrack</h1>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a></li>
+                    <li><a href="{{ url_for('lancamentos') }}" class="{% if request.endpoint == 'lancamentos' %}active{% endif %}">
+                        <i class="fas fa-exchange-alt"></i> Lançamentos
+                    </a></li>
+                    <li><a href="{{ url_for('novo_lancamento') }}" class="{% if request.endpoint == 'novo_lancamento' %}active{% endif %}">
+                        <i class="fas fa-plus-circle"></i> Novo Lançamento
+                    </a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-area">
+                <div class="user-info">
+                    <div class="user-name">{{ session.get('usuario_nome', 'Usuário') }}</div>
+                </div>
+                
+                <button class="logout-btn" onclick="window.location.href='{{ url_for('logout') }}'">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <main>            
+            <!-- Conteúdo principal da página -->
+            {% block conteudo %}{% endblock %}
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <i class="fas fa-chart-line"></i>
+                <span>NoTrack</span>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#">Sobre</a>
+                <a href="#">Ajuda</a>
+                <a href="#">Contato</a>
+                <a href="#">Privacidade</a>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 NoTrack - Sistema de Controle Financeiro
+            </div>
+        </div>
+    </footer>
+    
+    {% block scripts %}
+    
+    {% endblock %}
+</body>
+</html>

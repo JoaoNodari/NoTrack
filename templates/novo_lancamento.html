@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block title %}Novo Lançamento | NoTrack{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='novo_lancamento.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<div class="novo-lancamento-container">
+    <!-- Cabeçalho -->
+    <div class="page-header">
+        <div>
+            <h2><i class="fas fa-plus-circle"></i> Novo Lançamento</h2>
+            <p class="page-subtitle">Adicione uma nova transação financeira</p>
+        </div>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+        </a>
+    </div>
+
+    <!-- Grid de Formulários -->
+    <div class="form-grid">
+        <!-- Formulário de Novo Lançamento -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <h3><i class="fas fa-exchange-alt"></i> Informações do Lançamento</h3>
+            </div>
+            
+            <form method="post" class="form-lancamento">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="valor">
+                            <i class="fas fa-money-bill-wave"></i> Valor (R$)
+                        </label>
+                        <input type="number" step="0.01" name="valor" id="valor" 
+                               class="form-control" required min="0.01" placeholder="0,00">
+                        <div class="form-hint">Digite o valor da transação</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="data">
+                            <i class="fas fa-calendar-alt"></i> Data
+                        </label>
+                        <input type="date" name="data" id="data" 
+                               class="form-control" required value="{{ hoje }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="categoria_id">
+                            <i class="fas fa-tag"></i> Categoria
+                        </label>
+                        <select name="categoria_id" id="categoria_id" class="form-control" required>
+                            <option value="">Selecione uma categoria</option>
+                            {% for id, nome, tipo in categorias %}
+                            <option value="{{ id }}" data-tipo="{{ tipo }}">
+                                {{ nome }} 
+                                <span class="category-type {{ tipo }}">
+                                    ({{ 'Gasto' if tipo == 'gasto' else 'Receita' }})
+                                </span>
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-hint">
+                            Categorias disponíveis: {{ categorias|length }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="forma_pagamento">
+                            <i class="fas fa-credit-card"></i> Forma de Pagamento
+                        </label>
+                        <select name="forma_pagamento" id="forma_pagamento" class="form-control" required>
+                            <option value="">Selecione a forma</option>
+                            <option value="pix">
+                                <i class="fas fa-qrcode"></i> Pix
+                            </option>
+                            <option value="debito">
+                                <i class="fas fa-credit-card"></i> Débito
+                            </option>
+                            <option value="credito">
+                                <i class="fas fa-credit-card"></i> Crédito
+                            </option>
+                            <option value="dinheiro">
+                                <i class="fas fa-money-bill-wave"></i> Dinheiro
+                            </option>
+                            <option value="boleto">
+                                <i class="fas fa-barcode"></i> Boleto
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="descricao">
+                        <i class="fas fa-align-left"></i> Descrição
+                    </label>
+                    <textarea name="descricao" id="descricao" class="form-control" 
+                              rows="3" placeholder="Adicione uma descrição detalhada da transação..."></textarea>
+                    <div class="form-hint">Opcional - máx. 500 caracteres</div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-save"></i> Salvar Lançamento
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Limpar Formulário
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Formulário de Nova Categoria -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <h3><i class="fas fa-plus-square"></i> Criar Nova Categoria</h3>
+                <p class="form-card-subtitle">Adicione uma categoria personalizada</p>
+            </div>
+            
+            <form method="post" action="{{ url_for('nova_categoria') }}" class="form-categoria">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome_categoria">
+                            <i class="fas fa-tag"></i> Nome da Categoria
+                        </label>
+                        <input type="text" name="nome" id="nome_categoria" 
+                               class="form-control" required placeholder="Ex: Alimentação">
+                        <div class="form-hint">Nome descritivo para a categoria</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipo_categoria">
+                            <i class="fas fa-exchange-alt"></i> Tipo
+                        </label>
+                        <select name="tipo" id="tipo_categoria" class="form-control" required>
+                            <option value="">Selecione o tipo</option>
+                            <option value="gasto">
+                                <i class="fas fa-arrow-down"></i> Gasto
+                            </option>
+                            <option value="receita">
+                                <i class="fas fa-arrow-up"></i> Receita
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cor_categoria">
+                        <i class="fas fa-palette"></i> Cor da Categoria (opcional)
+                    </label>
+                    <div class="color-picker">
+                        <div class="color-option" data-color="#3498db" style="background-color: #3498db;"></div>
+                        <div class="color-option" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
+                        <div class="color-option" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
+                        <div class="color-option" data-color="#f39c12" style="background-color: #f39c12;"></div>
+                        <div class="color-option" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
+                        <div class="color-option" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
+                    </div>
+                    <input type="hidden" name="cor" id="cor_categoria" value="#3498db">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="descricao_categoria">
+                        <i class="fas fa-align-left"></i> Descrição (opcional)
+                    </label>
+                    <textarea name="descricao" id="descricao_categoria" class="form-control" 
+                              rows="2" placeholder="Descreva esta categoria..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Criar Categoria
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Categorias Existentes -->
+    <div class="categories-card">
+        <div class="categories-header">
+            <h3><i class="fas fa-tags"></i> Categorias Disponíveis</h3>
+            <span class="badge">{{ categorias|length }} categorias</span>
+        </div>
+        
+        <div class="categories-grid">
+            {% for id, nome, tipo in categorias %}
+            <div class="category-item {{ tipo }}">
+                <div class="category-icon">
+                    {% if tipo == 'gasto' %}
+                    <i class="fas fa-arrow-down"></i>
+                    {% else %}
+                    <i class="fas fa-arrow-up"></i>
+                    {% endif %}
+                </div>
+                <div class="category-info">
+                    <span class="category-name">{{ nome }}</span>
+                    <span class="category-type {{ tipo }}">
+                        {{ 'Gasto' if tipo == 'gasto' else 'Receita' }}
+                    </span>
+                </div>
+                <span class="category-count">{{ id }}</span>
+            </div>
+            {% else %}
+            <div class="empty-categories">
+                <i class="fas fa-tags fa-2x"></i>
+                <p>Nenhuma categoria cadastrada</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="categories-footer">
+            <p><i class="fas fa-info-circle"></i> Use categorias para organizar seus lançamentos</p>
+        </div>
+    </div>
+
+    <!-- Dicas Rápidas -->
+    <div class="tips-card">
+        <div class="tips-header">
+            <h4><i class="fas fa-lightbulb"></i> Dicas Rápidas</h4>
+        </div>
+        <ul class="tips-list">
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Selecione a categoria correta para melhor análise</span>
+            </li>
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Use descrições claras para facilitar buscas futuras</span>
+            </li>
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Registre transações imediatamente após ocorrerem</span>
+            </li>
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Crie categorias específicas para seus gastos recorrentes</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+// Definir data atual como padrão
+document.addEventListener('DOMContentLoaded', function() {
+    // Data atual no campo de data
+    if (!document.getElementById('data').value) {
+        const hoje = new Date().toISOString().split('T')[0];
+        document.getElementById('data').value = hoje;
+    }
+    
+    // Selecionar a primeira opção vazia como padrão
+    document.querySelectorAll('select').forEach(select => {
+        if (!select.value && select.options.length > 0) {
+            select.selectedIndex = 0;
+        }
+    });
+    
+    // Seletor de cores
+    document.querySelectorAll('.color-option').forEach(colorOption => {
+        colorOption.addEventListener('click', function() {
+            // Remover seleção anterior
+            document.querySelectorAll('.color-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Adicionar seleção atual
+            this.classList.add('selected');
+            
+            // Atualizar campo oculto
+            const color = this.getAttribute('data-color');
+            document.getElementById('cor_categoria').value = color;
+        });
+    });
+    
+    // Selecionar primeira cor por padrão
+    const firstColor = document.querySelector('.color-option');
+    if (firstColor) {
+        firstColor.classList.add('selected');
+    }
+    
+    // Mudar ícone da forma de pagamento baseado na seleção
+    document.getElementById('forma_pagamento').addEventListener('change', function() {
+        const iconMap = {
+            'pix': 'fa-qrcode',
+            'debito': 'fa-credit-card',
+            'credito': 'fa-credit-card',
+            'dinheiro': 'fa-money-bill-wave',
+            'boleto': 'fa-barcode'
+        };
+        
+        const selectedValue = this.value;
+        const selectElement = this;
+        
+        // Atualizar texto das opções (opcional)
+        Array.from(selectElement.options).forEach(option => {
+            if (option.value && iconMap[option.value]) {
+                const iconClass = iconMap[option.value];
+                option.innerHTML = `<i class="fas ${iconClass}"></i> ${option.text}`;
+            }
+        });
+    });
+    
+    // Validar valor antes de enviar
+    document.querySelector('.form-lancamento').addEventListener('submit', function(e) {
+        const valor = parseFloat(document.getElementById('valor').value);
+        const categoria = document.getElementById('categoria_id').value;
+        const formaPagamento = document.getElementById('forma_pagamento').value;
+        
+        if (!valor || valor <= 0) {
+            e.preventDefault();
+            alert('Por favor, insira um valor válido maior que zero.');
+            document.getElementById('valor').focus();
+            return false;
+        }
+        
+        if (!categoria) {
+            e.preventDefault();
+            alert('Por favor, selecione uma categoria.');
+            document.getElementById('categoria_id').focus();
+            return false;
+        }
+        
+        if (!formaPagamento) {
+            e.preventDefault();
+            alert('Por favor, selecione uma forma de pagamento.');
+            document.getElementById('forma_pagamento').focus();
+            return false;
+        }
+        
+        // Formatar valor com duas casas decimais
+        document.getElementById('valor').value = valor.toFixed(2);
+        
+        return true;
+    });
+    
+    // Focar no primeiro campo
+    document.getElementById('valor').focus();
+});
+</script>
+{% endblock %}
