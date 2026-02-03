@@ -28,7 +28,7 @@ from rich.traceback import install
 install()
 
 app = Flask(__name__)
-app.secret_key = "notrack_super_secret_key"
+app.secret_key = os.getenv("SECRET_KEY", "dev_key")
 
 def login_required(f):
     @wraps(f)
