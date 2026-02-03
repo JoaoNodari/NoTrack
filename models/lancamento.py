@@ -1,4 +1,4 @@
-from database.connection import get_connection
+from database.connection_local import get_connection
 import csv
 from io import StringIO
 

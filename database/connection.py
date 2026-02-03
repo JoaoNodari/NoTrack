@@ -1,10 +1,15 @@
+import os
 import psycopg2
 
 def get_connection():
+    DATABASE_URL = os.getenv("DATABASE_URL")
+
+    if DATABASE_URL:
+        return psycopg2.connect(DATABASE_URL, sslmode="require")
+
     return psycopg2.connect(
-        host="172.16.0.139",
-        database="Teste",
-        user="joao",
-        password="Peol@2016",
-        port="5432"
+        dbname="notrack",
+        user="postgres",
+        password="123",
+        host="localhost"
     )

@@ -1,4 +1,4 @@
-from database.connection import get_connection
+from database.connection_local import get_connection
 
 def listar_categorias_por_usuario(usuario_id):
     conn = get_connection()
