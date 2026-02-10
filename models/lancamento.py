@@ -1,4 +1,4 @@
-from database.connection_local import get_connection
+from database.connection import get_connection
 import csv
 from io import StringIO
 
@@ -197,41 +197,23 @@ def total_por_forma_pagamento_no_mes(usuario_id, ano, mes):
 
     cursor.execute("""
         SELECT 
-            forma_pagamento,
-            COALESCE(SUM(valor), 0)
-        FROM lancamentos
-        WHERE usuario_id = %s
-          AND EXTRACT(YEAR FROM data) = %s
-          AND EXTRACT(MONTH FROM data) = %s
-        GROUP BY forma_pagamento
-        ORDER BY forma_pagamento
+            l.forma_pagamento, 
+            COALESCE(SUM(l.valor), 0)
+        FROM lancamentos l
+        JOIN categorias c ON c.id = l.categoria_id
+        WHERE l.usuario_id = %s
+          AND c.tipo = 'gasto'
+          AND EXTRACT(YEAR FROM l.data) = %s
+          AND EXTRACT(MONTH FROM l.data) = %s
+        GROUP BY l.forma_pagamento
+        ORDER BY l.forma_pagamento
     """, (usuario_id, ano, mes))
 
-    resultado = cursor.fetchall()
+    dados = cursor.fetchall()
     cursor.close()
     conn.close()
 
-    return resultado
-
-
-def total_credito_no_mes(usuario_id, ano, mes):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        SELECT COALESCE(SUM(valor), 0)
-        FROM lancamentos
-        WHERE usuario_id = %s
-          AND forma_pagamento = 'credito'
-          AND EXTRACT(YEAR FROM data) = %s
-          AND EXTRACT(MONTH FROM data) = %s
-    """, (usuario_id, ano, mes))
-
-    total = cursor.fetchone()[0]
-    cursor.close()
-    conn.close()
-
-    return total
+    return dados
 
 def comparativo_pix_credito(usuario_id, ano, mes):
     conn = get_connection()
@@ -347,3 +329,22 @@ def exportar_lancamentos_csv(usuario_id, ano, mes):
         writer.writerow(linha)
 
     return output.getvalue()
+
+def total_credito_no_mes(usuario_id, ano, mes):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT COALESCE(SUM(valor), 0)
+        FROM lancamentos
+        WHERE usuario_id = %s
+          AND forma_pagamento = 'credito'
+          AND EXTRACT(YEAR FROM data) = %s
+          AND EXTRACT(MONTH FROM data) = %s
+    """, (usuario_id, ano, mes))
+
+    total = cursor.fetchone()[0]
+    cursor.close()
+    conn.close()
+
+    return total

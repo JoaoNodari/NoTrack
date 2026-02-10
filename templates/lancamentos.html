@@ -106,18 +106,18 @@
         
         <div class="stat-card">
             <span class="stat-label">Total Gastos</span>
-            <span class="stat-value negative">R$ {{ "%.2f"|format(total_gastos) }}</span>
+            <span class="stat-value negative">R$ {{ "%.2f"|format(total_gastos) | brl }}</span>
         </div>
         
         <div class="stat-card">
             <span class="stat-label">Total Receitas</span>
-            <span class="stat-value positive">R$ {{ "%.2f"|format(total_receitas) }}</span>
+            <span class="stat-value positive">R$ {{ "%.2f"|format(total_receitas) | brl }}</span>
         </div>
         
         <div class="stat-card">
             <span class="stat-label">Saldo</span>
             <span class="stat-value {% if (total_receitas - total_gastos) >= 0 %}positive{% else %}negative{% endif %}">
-                R$ {{ "%.2f"|format(total_receitas - total_gastos) }}
+                R$ {{ "%.2f"|format(total_receitas - total_gastos) | brl }}
             </span>
         </div>
     </div>

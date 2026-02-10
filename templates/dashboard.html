@@ -43,7 +43,7 @@
             </div>
             <div class="card-content">
                 <h3>Receitas</h3>
-                <p class="card-value">R$ {{ total_receita }}</p>
+                <p class="card-value">R$ {{ total_receita | brl }}</p>
                 <p class="card-subtitle">Total do período</p>
             </div>
         </div>
@@ -54,7 +54,7 @@
             </div>
             <div class="card-content">
                 <h3>Gastos</h3>
-                <p class="card-value">R$ {{ total_gasto }}</p>
+                <p class="card-value">R$ {{ total_gasto | brl }}</p>
                 <p class="card-subtitle">Total do período</p>
             </div>
         </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="card-content">
                 <h3>Saldo</h3>
-                <p class="card-value">R$ {{ saldo }}</p>
+                <p class="card-value">R$ {{ saldo | brl }}</p>
                 <p class="card-subtitle">
                     {% if saldo|float > 0 %}
                         <span class="positive">Positivo</span>
@@ -119,6 +119,29 @@
             </div>
         </div>
 
+        <!-- Gráfico 3: Formas de Pagamento -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Formas de Pagamento ({{ mes }}/{{ ano }})</h3>
+                <p class="chart-subtitle">Distribuição por meio de pagamento</p>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="graficoFormas"></canvas>
+                {% if not formas_labels %}
+                <div class="no-data">
+                    <i class="fas fa-credit-card"></i>
+                    <p>Nenhum dado disponível</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="chart-footer">
+                <div class="highlight-card">
+                    <h4>Total no Crédito:</h4>
+                    <p class="highlight-value">R$ {{ total_credito }}</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Gráfico 2: Gastos por Mês -->
         <div class="chart-container">
             <div class="chart-header">
@@ -143,29 +166,6 @@
                     </li>
                     {% endfor %}
                 </ul>
-            </div>
-        </div>
-
-        <!-- Gráfico 3: Formas de Pagamento -->
-        <div class="chart-container">
-            <div class="chart-header">
-                <h3>Formas de Pagamento ({{ mes }}/{{ ano }})</h3>
-                <p class="chart-subtitle">Distribuição por meio de pagamento</p>
-            </div>
-            <div class="chart-wrapper">
-                <canvas id="graficoFormas"></canvas>
-                {% if not formas_labels %}
-                <div class="no-data">
-                    <i class="fas fa-credit-card"></i>
-                    <p>Nenhum dado disponível</p>
-                </div>
-                {% endif %}
-            </div>
-            <div class="chart-footer">
-                <div class="highlight-card">
-                    <h4>Total no Crédito:</h4>
-                    <p class="highlight-value">R$ {{ total_credito }}</p>
-                </div>
             </div>
         </div>
 

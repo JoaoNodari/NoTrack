@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, Response, session, flash
 from models.usuario import criar_usuario, validar_login
 from functools import wraps
+from datetime import datetime
+import os
 from models.lancamento import (
     total_por_categoria_no_mes,
     gasto_por_mes_no_ano,
@@ -8,7 +10,6 @@ from models.lancamento import (
     criar_lancamento,
     buscar_lancamento_por_id,
     atualizar_lancamento,
-    listar_lancamentos_por_mes,
     excluir_lancamento,
     total_credito_no_mes,
     total_por_forma_pagamento_no_mes,
@@ -29,6 +30,14 @@ install()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_key")
+
+def format_brl(valor):
+    try:
+        return f"{float(valor):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    except:
+        return valor
+
+app.jinja_env.filters["brl"] = format_brl
 
 def login_required(f):
     @wraps(f)
@@ -83,8 +92,9 @@ def logout():
 def dashboard():
     usuario_id = session["usuario_id"]
 
-    mes = int(request.args.get("mes", 1))
-    ano = int(request.args.get("ano", 2026))
+    day = datetime.now()
+    mes = int(request.args.get("mes", day.month))
+    ano = int(request.args.get("ano", day.year))
 
     gastos_mes = total_por_categoria_no_mes(usuario_id, "gasto", ano, mes)
     gastos_ano = gasto_por_mes_no_ano(usuario_id, ano)
@@ -229,3 +239,4 @@ def exportar_lancamentos():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
