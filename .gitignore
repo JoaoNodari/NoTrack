@@ -1,2 +1,4 @@
 connection_local.py
 connection-nuvem.py
+.env
+connection-nuvem.py
