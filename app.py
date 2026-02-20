@@ -238,5 +238,8 @@ def exportar_lancamentos():
     )
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    # Pega a porta que a Render mandar. Se não tiver (no seu PC), usa a 5000.
+    port = int(os.environ.get("PORT", 5000))
+    
+    # host="0.0.0.0" permite que a Render direcione o tráfego para o seu app
+    app.run(host="0.0.0.0", port=port)
