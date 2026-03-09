@@ -1,0 +1,317 @@
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.register-card {
+    background: var(--card-bg);
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    border-radius: 1rem;
+    box-shadow: 0 10px 40px rgba(94, 114, 228, 0.08);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+/* Lado esquerdo - Benefícios */
+.register-left {
+    flex: 1;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.register-left .logo img {
+    max-width: 90px;
+}
+
+.register-left h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    color: var(--primary);
+}
+
+.register-left p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--primary);
+}
+
+.benefits-list {
+    list-style: none;
+    color: var(--primary);
+}
+
+.benefits-list li {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    background: var(--border);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    transition: transform 0.2s;
+}
+
+.benefits-list li:hover {
+    transform: translateX(5px);
+}
+
+.benefits-list li i {
+    font-size: 1rem;
+}
+
+/* Lado direito - Formulário */
+.register-right {
+    flex: 1;
+    padding: 2.5rem;
+    border-left: 1px solid var(--primary);
+}
+
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+    margin: 1rem 0;
+}
+
+.dot {
+    width: 0.25rem;
+    height: 0.25rem;
+    background: var(--border);
+    border-radius: 50%;
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.register-header h2 {
+    color: var(--text);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.register-header p {
+    color: var(--text-light);
+    font-size: 0.875rem;
+}
+
+/* Mensagens */
+.message {
+    padding: 0.875rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.error {
+    background: #fff2f2;
+    color: var(--danger);
+    border: 1px solid rgba(245, 54, 92, 0.1);
+}
+
+.success {
+    background: #e8f7ef;
+    color: var(--success);
+    border: 1px solid rgba(45, 206, 137, 0.1);
+}
+
+.message i {
+    font-size: 1rem;
+}
+
+/* Formulário */
+.input-group {
+    margin-bottom: 1.25rem;
+    position: relative;
+}
+
+.input-group i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    background: var(--card-bg);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(94, 114, 228, 0.1);
+}
+
+.input-group input:focus + i {
+    color: var(--primary);
+}
+
+.input-group input::placeholder {
+    color: #adb5bd;
+}
+
+/* Requisitos de senha */
+.password-requirements {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0 1.25rem 0;
+    font-size: 0.813rem;
+    color: var(--text-light);
+    border-left: 3px solid var(--primary);
+    transition: border-color 0.3s;
+}
+
+.password-requirements p {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.password-requirements ul {
+    padding-left: 1.5rem;
+}
+
+.password-requirements li {
+    margin-bottom: 0.25rem;
+}
+
+/* Botão */
+.btn-register {
+    width: 100%;
+    padding: 0.875rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.btn-register:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.btn-register:active {
+    transform: translateY(0);
+}
+
+/* Links */
+.terms {
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: center;
+    line-height: 1.5;
+}
+
+.terms a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.terms a:hover {
+    text-decoration: underline;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--text-light);
+    font-size: 0.875rem;
+}
+
+.login-link a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.login-link a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--text-light);
+    font-size: 0.75rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .register-card {
+        flex-direction: column;
+        max-width: 450px;
+    }
+
+    .register-left {
+        padding: 2rem 1.5rem;
+    }
+
+    .register-left h2 {
+        font-size: 1.25rem;
+    }
+
+    .register-right {
+        padding: 2rem 1.5rem;
+        border-left: none;
+        border-top: 1px solid var(--border);
+    }
+}
+
+@media (max-width: 480px) {
+    .register-left {
+        padding: 1.5rem 1rem;
+    }
+
+    .register-right {
+        padding: 1.5rem 1rem;
+    }
+
+    .register-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .benefits-list li {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.813rem;
+    }
+}

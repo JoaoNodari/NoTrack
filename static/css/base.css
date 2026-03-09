@@ -1,0 +1,249 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.75rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Logo */
+.logo img {
+    max-width: 50px;
+    display: flex;
+    align-items: center;
+}
+/* Navegação */
+nav ul {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
+}
+
+nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+}
+
+nav ul li a i {
+    font-size: 1rem;
+    color: var(--text-light);
+    transition: color 0.2s;
+}
+
+nav ul li a:hover {
+    color: var(--primary);
+    background: rgba(94, 114, 228, 0.05);
+}
+
+nav ul li a:hover i {
+    color: var(--primary);
+}
+
+nav ul li a.active {
+    color: var(--primary);
+    background: rgba(94, 114, 228, 0.08);
+}
+
+nav ul li a.active i {
+    color: var(--primary);
+}
+
+/* Área do usuário */
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-info {
+    text-align: right;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.logout-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-light);
+    padding: 0.4rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    background: rgba(245, 54, 92, 0.05);
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.logout-btn i {
+    font-size: 0.85rem;
+}
+
+/* Main container */
+.main-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    flex: 1;
+    width: 100%;
+}
+
+/* Footer */
+footer {
+    background: var(--card-bg);
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.footer-links a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: var(--primary);
+}
+
+.copyright {
+    color: var(--text-light);
+    font-size: 0.8rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        padding: 0.75rem 1rem;
+    }
+    
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    nav ul li a {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .user-area {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .main-container {
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+    }
+    
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo i {
+        font-size: 1.25rem;
+    }
+    
+    .logo h1 {
+        font-size: 1rem;
+    }
+    
+    nav ul {
+        width: 100%;
+    }
+    
+    nav ul li {
+        width: 100%;
+    }
+    
+    nav ul li a {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .user-area {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .user-info {
+        text-align: center;
+    }
+    
+    .logout-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -2,14 +2,14 @@
 
 {% block title %}Dashboard | NoTrack{% endblock %}
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='../static/css/dashboard.css') }}">
 {% endblock %}
 
 {% block conteudo %}
 <div class="dashboard">
     <!-- Cabeçalho do Dashboard -->
     <div class="dashboard-header">
-        <h2>Dashboard Financeiro</h2>
+        <h2>Dashboard</h2>
         <div class="period-selector">
             <form method="get" class="filter-form">
                 <div class="form-row">

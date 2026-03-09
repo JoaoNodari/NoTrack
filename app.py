@@ -3,6 +3,7 @@ from models.usuario import criar_usuario, validar_login
 from functools import wraps
 from datetime import datetime
 import os
+from dotenv import load_dotenv
 from models.lancamento import (
     total_por_categoria_no_mes,
     gasto_por_mes_no_ano,
@@ -237,9 +238,10 @@ def exportar_lancamentos():
         headers={"Content-Disposition": f"attachment; filename=lancamentos_{mes}_{ano}.csv"}
     )
 
+load_dotenv()  # Carrega as variáveis do .env
+
 if __name__ == "__main__":
-    # Pega a porta que a Render mandar. Se não tiver (no seu PC), usa a 5000.
     port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_DEBUG", "False").lower() == "true"
     
-    # host="0.0.0.0" permite que a Render direcione o tráfego para o seu app
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=debug)
