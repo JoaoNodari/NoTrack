@@ -1,4 +1,4 @@
-connection_local.py
-connection-nuvem.py
 .env
-connection-nuvem.py
+.venv/
+__pycache__/
+*.pyc
