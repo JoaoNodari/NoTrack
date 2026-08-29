@@ -3,7 +3,7 @@ from models.usuario import criar_usuario, validar_login
 from functools import wraps
 from datetime import datetime
 import os
-from dotenv import load_dotenv
+from config import Config
 from models.lancamento import (
     total_por_categoria_no_mes,
     gasto_por_mes_no_ano,
@@ -27,10 +27,11 @@ from models.categoria import (
 )
 
 from rich.traceback import install
+
 install()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY", "dev_key")
+app.config.from_object(Config)
 
 def format_brl(valor):
     try:
@@ -238,10 +239,9 @@ def exportar_lancamentos():
         headers={"Content-Disposition": f"attachment; filename=lancamentos_{mes}_{ano}.csv"}
     )
 
-load_dotenv()  # Carrega as variáveis do .env
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    debug = os.environ.get("FLASK_DEBUG", "False").lower() == "true"
-    
-    app.run(host="0.0.0.0", port=port, debug=debug)
+    app.run(
+        host="0.0.0.0",
+        port=app.config["PORT"],
+        debug=app.config["FLASK_DEBUG"]
+    )
