@@ -21,7 +21,7 @@
             <nav>
                 <ul>
                     <li>
-                        <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
+                        <a href="{{ url_for('dashboard.dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
                             <i class="fas fa-home"></i>
                             <span>Dashboard</span>
                         </a>
@@ -46,7 +46,7 @@
                     <span class="user-name">{{ session.get('usuario_nome', 'Usuário') }}</span>
                 </div>
                 
-                <button class="logout-btn" onclick="window.location.href='{{ url_for('logout') }}'">
+                <button class="logout-btn" onclick="window.location.href='{{ url_for('auth.logout') }}'">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Sair</span>
                 </button>

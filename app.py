@@ -1,21 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, Response, session, flash
-from models.usuario import criar_usuario, validar_login
-from functools import wraps
-from datetime import datetime
+from flask import render_template, request, redirect, url_for, Response, session, flash
+from app import create_app
+from app.auth.auth_decorators import login_required
 import os
-from config import Config
 from models.lancamento import (
-    total_por_categoria_no_mes,
-    gasto_por_mes_no_ano,
-    total_anual_por_categoria,
     criar_lancamento,
     buscar_lancamento_por_id,
     atualizar_lancamento,
     excluir_lancamento,
-    total_credito_no_mes,
-    total_por_forma_pagamento_no_mes,
-    comparativo_pix_credito,
-    resumo_do_mes,
     listar_lancamentos_filtrados,
     exportar_lancamentos_csv
 )
@@ -30,8 +21,7 @@ from rich.traceback import install
 
 install()
 
-app = Flask(__name__)
-app.config.from_object(Config)
+app = create_app()
 
 def format_brl(valor):
     try:
@@ -40,90 +30,6 @@ def format_brl(valor):
         return valor
 
 app.jinja_env.filters["brl"] = format_brl
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if "usuario_id" not in session:
-            return redirect(url_for("login"))
-        return f(*args, **kwargs)
-    return decorated_function
-
-@app.route("/")
-def home():
-    return redirect(url_for("dashboard"))
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        nome = request.form["nome"]
-        email = request.form["email"]
-        senha = request.form["senha"]
-
-        criar_usuario(nome, email, senha)
-        return redirect(url_for("login"))
-
-    return render_template("register.html")
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        email = request.form["email"]
-        senha = request.form["senha"]
-
-        user = validar_login(email, senha)
-
-        if user:
-            session.clear()
-            session["usuario_id"] = user["id"]
-            session["usuario_nome"] = user["nome"]
-            return redirect(url_for("dashboard"))
-
-        session.clear()
-        return render_template("login.html", erro="Email ou senha inválidos")
-
-    return render_template("login.html")
-
-@app.route("/logout")
-def logout():
-    session.clear()
-    return redirect(url_for("login"))
-
-@app.route("/dashboard")
-@login_required
-def dashboard():
-    usuario_id = session["usuario_id"]
-
-    day = datetime.now()
-    mes = int(request.args.get("mes", day.month))
-    ano = int(request.args.get("ano", day.year))
-
-    gastos_mes = total_por_categoria_no_mes(usuario_id, "gasto", ano, mes)
-    gastos_ano = gasto_por_mes_no_ano(usuario_id, ano)
-    total_categoria_ano = total_anual_por_categoria(usuario_id, "gasto", ano)
-    formas_mes = total_por_forma_pagamento_no_mes(usuario_id, ano, mes)
-    total_credito = total_credito_no_mes(usuario_id, ano, mes)
-    pix_credito = comparativo_pix_credito(usuario_id, ano, mes)
-    total_gasto, total_receita, saldo, qtd = resumo_do_mes(usuario_id, ano, mes)
-
-    return render_template(
-        "dashboard.html",
-        categorias_mes=[i[0] for i in gastos_mes],
-        valores_mes=[float(i[1]) for i in gastos_mes],
-        meses_ano=[int(i[0]) for i in gastos_ano],
-        valores_ano=[float(i[1]) for i in gastos_ano],
-        formas_labels=[f[0] for f in formas_mes],
-        formas_valores=[float(f[1]) for f in formas_mes],
-        total_credito=total_credito,
-        labels_pc=[i[0] for i in pix_credito],
-        valores_pc=[float(i[1]) for i in pix_credito],
-        total_gasto=total_gasto,
-        total_receita=total_receita,
-        saldo=saldo,
-        qtd=qtd,
-        mes=mes,
-        ano=ano
-    )
 
 @app.route("/lancamentos")
 @login_required
