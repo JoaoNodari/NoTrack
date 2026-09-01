@@ -15,7 +15,8 @@
         </div>
         
         <div class="header-actions">
-            <a href="{{ url_for('exportar_lancamentos', mes=mes, ano=ano) }}" class="btn btn-secondary">
+            <a href="{{ url_for('lancamentos.exportar_lancamentos', mes=mes, ano=ano) }}"
+            class="btn btn-secondary">
                 <i class="fas fa-download"></i> Exportar CSV
             </a>
         </div>
@@ -82,7 +83,8 @@
                     <button type="submit" class="btn btn-primary filter-btn">
                         <i class="fas fa-search"></i> Aplicar Filtros
                     </button>
-                    <a href="{{ url_for('lancamentos') }}" class="btn btn-secondary">
+                    <a href="{{ url_for('lancamentos.lancamentos') }}"
+                    class="btn btn-secondary">
                         <i class="fas fa-times"></i> Limpar Filtros
                     </a>
                 </div>
@@ -182,11 +184,11 @@
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 
-                                <a href="{{ url_for('excluir_lancamento_route', id=id) }}"
-                                   onclick="return confirm('Tem certeza que deseja excluir este lançamento?')"
-                                   class="btn-icon btn-delete" title="Excluir">
-                                    <i class="fas fa-trash"></i>
-                                </a>
+                                <form method="POST" action="{{ url_for('lancamentos.excluir_lancamento_route', id=id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este lançamento?')">
+                                    <button type="submit" class="btn-icon btn-delete" title="Excluir">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
@@ -207,7 +209,8 @@
             <i class="fas fa-receipt fa-3x"></i>
             <h3>Nenhum lançamento encontrado</h3>
             <p>Não há lançamentos registrados para os filtros selecionados.</p>
-            <a href="{{ url_for('novo_lancamento') }}" class="btn btn-primary">
+            <a href="{{ url_for('lancamentos.novo_lancamento') }}"
+            class="btn btn-primary">
                 <i class="fas fa-plus"></i> Adicionar Primeiro Lançamento
             </a>
         </div>

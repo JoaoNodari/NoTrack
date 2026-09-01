@@ -27,13 +27,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url_for('lancamentos') }}" class="{% if request.endpoint == 'lancamentos' %}active{% endif %}">
+                        <a href="{{ url_for('lancamentos.lancamentos') }}" class="{% if request.endpoint == 'lancamentos' %}active{% endif %}">
                             <i class="fas fa-exchange-alt"></i>
                             <span>Lançamentos</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url_for('novo_lancamento') }}" class="{% if request.endpoint == 'novo_lancamento' %}active{% endif %}">
+                        <a href="{{ url_for('lancamentos.novo_lancamento') }}" class="{% if request.endpoint == 'novo_lancamento' %}active{% endif %}">
                             <i class="fas fa-plus-circle"></i>
                             <span>Novo Lançamento</span>
                         </a>
