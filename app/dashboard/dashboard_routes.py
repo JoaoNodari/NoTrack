@@ -6,7 +6,7 @@ from datetime import datetime
 from flask import Blueprint, render_template, request, session
 
 from app.auth.auth_decorators import login_required
-from models.lancamento import total_por_categoria_no_mes, gasto_por_mes_no_ano, total_anual_por_categoria, total_credito_no_mes, total_por_forma_pagamento_no_mes, comparativo_pix_credito, resumo_do_mes
+from app.models.lancamento import total_por_categoria_no_mes, gasto_por_mes_no_ano, total_anual_por_categoria, total_credito_no_mes, total_por_forma_pagamento_no_mes, comparativo_pix_credito, resumo_do_mes
 
 dashboard_bp = Blueprint("dashboard", __name__)
 
@@ -20,47 +20,19 @@ def dashboard():
     mes = int(request.args.get("mes", hoje.month))
     ano = int(request.args.get("ano", hoje.year))
 
-    gastos_mes = total_por_categoria_no_mes(
-        usuario_id,
-        "gasto",
-        ano,
-        mes
-    )
+    gastos_mes = total_por_categoria_no_mes(usuario_id, "gasto", ano, mes)
 
-    gastos_ano = gasto_por_mes_no_ano(
-        usuario_id,
-        ano
-    )
+    gastos_ano = gasto_por_mes_no_ano(usuario_id, ano)
 
-    total_categoria_ano = total_anual_por_categoria(
-        usuario_id,
-        "gasto",
-        ano
-    )
+    total_categoria_ano = total_anual_por_categoria(usuario_id, "gasto", ano)
 
-    formas_mes = total_por_forma_pagamento_no_mes(
-        usuario_id,
-        ano,
-        mes
-    )
+    formas_mes = total_por_forma_pagamento_no_mes(usuario_id, ano, mes)
 
-    total_credito = total_credito_no_mes(
-        usuario_id,
-        ano,
-        mes
-    )
+    total_credito = total_credito_no_mes(usuario_id, ano, mes)
 
-    pix_credito = comparativo_pix_credito(
-        usuario_id,
-        ano,
-        mes
-    )
+    pix_credito = comparativo_pix_credito(usuario_id, ano, mes)
 
-    total_gasto, total_receita, saldo, qtd = resumo_do_mes(
-        usuario_id,
-        ano,
-        mes
-    )
+    total_gasto, total_receita, saldo, qtd = resumo_do_mes(usuario_id, ano, mes)
 
     return render_template(
         "dashboard.html",

@@ -1,4 +1,4 @@
-from models.categoria import criar_categoria
+from app.models.categoria import criar_categoria
 
 def criar_categoria_para_usuario(usuario_id, nome, tipo):
     if tipo not in ["receita", "gasto"]:

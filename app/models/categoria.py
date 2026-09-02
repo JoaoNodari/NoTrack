@@ -1,4 +1,4 @@
-from database.connection import get_connection
+from app.database.coonnection import get_connection
 
 def listar_categorias_por_usuario(usuario_id):
     conn = get_connection()
@@ -6,8 +6,7 @@ def listar_categorias_por_usuario(usuario_id):
 
     cursor.execute(
         """
-        SELECT id, nome, tipo
-        FROM categorias
+        SELECT id, nome, tipo FROM categorias
         WHERE usuario_id = %s
         ORDER BY tipo, nome
         """,

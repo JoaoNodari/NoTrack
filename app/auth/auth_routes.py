@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, session
 
-from models.usuario import criar_usuario, validar_login
+from app.models.usuario import criar_usuario, validar_login
 
 auth_bp = Blueprint("auth", __name__)
 

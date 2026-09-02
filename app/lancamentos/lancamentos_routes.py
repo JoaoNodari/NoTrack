@@ -7,8 +7,8 @@ from flask import Blueprint, Response, redirect, render_template, request, sessi
 
 from app.auth.auth_decorators import login_required
 
-from models.categoria import listar_categorias_por_usuario
-from models.lancamento import atualizar_lancamento, buscar_lancamento_por_id, criar_lancamento, excluir_lancamento, exportar_lancamentos_csv, listar_lancamentos_filtrados
+from app.models.categoria import listar_categorias_por_usuario
+from app.models.lancamento import atualizar_lancamento, buscar_lancamento_por_id, criar_lancamento, excluir_lancamento, exportar_lancamentos_csv, listar_lancamentos_filtrados
 
 lancamentos_bp = Blueprint("lancamentos", __name__)
 
