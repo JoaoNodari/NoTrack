@@ -1,4 +1,46 @@
-from app.database.coonnection import get_connection
+# Responsável pela representação e acesso aos dados dos lançamentos.
+# Durante a migração para SQLAlchemy, este arquivo mantém
+# temporariamente o model e as funções antigas de acesso ao banco.
+
+from datetime import datetime, timezone
+from app.extensions import db
+
+class Lancamento(db.Model):
+    __tablename__ = "lancamentos"
+
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, nullable=False)
+    categoria_id = db.Column(db.Integer, nullable=False)
+
+    valor = db.Column(db.Numeric(12, 2), nullable=False)
+    data = db.Column(db.Date, nullable=False)
+    descricao = db.Column(db.Text)
+    forma_pagamento = db.Column(db.String(20))
+
+    criado_em = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc), server_default=db.func.now())
+    atualizado_em = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc), server_default=db.func.now(), onupdate=lambda: datetime.now(timezone.utc))
+    
+    __table_args__ = (
+            db.CheckConstraint(
+                "valor > 0",
+                name="ck_lancamentos_valor_positivo"
+            ),
+
+            db.ForeignKeyConstraint(
+                ["categoria_id", "usuario_id"],
+                ["categorias.id", "categorias.usuario_id"],
+                name="fk_lancamentos_categoria_usuario"
+            ),
+
+            db.Index(
+                "ix_lancamentos_usuario_data",
+                "usuario_id",
+                "data"
+            ),
+        )
+
+
+from app.database.connection import get_connection
 import csv
 from io import StringIO
 

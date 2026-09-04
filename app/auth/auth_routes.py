@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, session
 
-from app.models.usuario import criar_usuario, validar_login
+from app.auth.auth_service import criar_usuario, validar_login
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -14,12 +14,18 @@ def register():
         email = request.form["email"]
         senha = request.form["senha"]
 
-        criar_usuario(nome, email, senha)
+        resultado = criar_usuario(nome, email, senha)
+
+        if not resultado["sucesso"]:
+            if resultado["erro"] == "email_ja_cadastrado":
+                return render_template(
+                    "register.html",
+                    erro="Este e-mail já está cadastrado."
+                )
 
         return redirect(url_for("auth.login"))
 
-    return render_template("auth.register.html")
-
+    return render_template("register.html")
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -39,7 +45,7 @@ def login():
         session.clear()
 
         return render_template(
-            "auth.login.html",
+            "login.html",
             erro="Email ou senha inválidos"
         )
 
